@@ -1,0 +1,33 @@
+
+.container{
+    max-width: 1400px;
+    margin: 0 auto;
+    background: white;
+    padding: 10px 20px;
+}
+
+.title{
+    font-size: 1.5em;
+    font-weight: bold;
+    margin-bottom: 0.5em;
+}
+
+.container label{
+    color: grey;
+}
+
+.container input{
+    padding: 10px;
+    width: 100%;
+    margin-top: 10px;
+    border-radius: 5px;
+    
+}
+
+
+.form-container{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    column-gap: 20px;
+}
+
