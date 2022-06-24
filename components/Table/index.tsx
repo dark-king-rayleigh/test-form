@@ -104,23 +104,11 @@ const CompanyTable = () => {
         Company Curation
       </Title>
       <Divider />
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          padding: "20px 5px",
-        }}
-      >
+      <div className={classes["container__upper-container"]}>
         <div>
           <Paragraph>Company Name</Paragraph>
           <div
-            style={{
-              display: "flex",
-              columnGap: "20px",
-              alignItems: "center",
-              width: "150%",
-              borderRadius: "5px",
-            }}
+            className={classes["container__upper-container__search-container"]}
           >
             <Input
               style={{ width: "100%", padding: "10px" }}
@@ -153,13 +141,7 @@ const CompanyTable = () => {
         <Link href={"/add"}>
           <Button
             size="large"
-            style={{
-              backgroundColor: "black",
-              color: "white",
-              padding: "10px 20px",
-              height: "fit-content",
-              borderRadius: "5px",
-            }}
+            className={classes["btn-add"]}
             icon={<PlusOutlined />}
           >
             Add new Company

@@ -5,3 +5,40 @@
   margin: 0 auto;
   padding: 20px;
 }
+
+.container__upper-container {
+  padding: 20px 5px;
+}
+
+.container__upper-container__search-container {
+  border-radius: "5px";
+  display: flex;
+  flex-direction: column;
+  row-gap: 20px;
+}
+
+.btn-add {
+  background-color: "black" !important;
+  color: "white";
+  padding: "10px 20px";
+  height: "fit-content";
+  width: 100%;
+  border-radius: "5px";
+}
+
+@media (min-width: 768px) {
+  .container__upper-container {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .container__upper-container__search-container {
+    flex-direction: row;
+    column-gap: 20px;
+    align-items: center;
+    width: 150%;
+  }
+  .btn-add {
+    width: fit-content;
+  }
+}
