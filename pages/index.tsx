@@ -6,10 +6,6 @@ import TableView from "../components/Table";
 import { CompanyDetails } from "../typing";
 
 const Home: NextPage = () => {
-  const [companyData, setCompanyData] = useState<CompanyDetails[] | []>([]);
-  const [addData, setAddData] = useState(true);
-  console.log("companyData", companyData);
-
   return (
     <>
       <Head>
@@ -25,15 +21,7 @@ const Home: NextPage = () => {
           paddingTop: "4rem",
         }}
       >
-        {!addData ? (
-          <TableView />
-        ) : (
-          <Form
-            setCompanyData={setCompanyData}
-            companyData={companyData}
-            setAddData={setAddData}
-          />
-        )}
+        <TableView />
       </main>
     </>
   );

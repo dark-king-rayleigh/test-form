@@ -4,6 +4,8 @@ import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import classes from "./Form.module.css";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
 import { Address, CompanyDetails } from "../../typing";
+import { useDispatch } from "react-redux";
+import { companyActions } from "../../store/company/company-slice";
 
 const { Title } = Typography;
 
@@ -27,11 +29,9 @@ interface FormInterface {
 
 // Main Component starts
 
-const FormData: React.FC<{
-  setCompanyData: Function;
-  companyData: CompanyDetails[] | [];
-  setAddData: Function;
-}> = ({ setCompanyData, companyData, setAddData }) => {
+const FormData = () => {
+  const dispatch = useDispatch();
+
   const [form] = Form.useForm();
   const [loading, setLoading] = React.useState(false);
 
@@ -63,7 +63,7 @@ const FormData: React.FC<{
     };
 
     try {
-      setCompanyData([...companyData, data]);
+      dispatch(companyActions.addCompanyDetails(data));
       notification.info({
         message: `Success`,
         description: "Successfully added data",
@@ -73,10 +73,14 @@ const FormData: React.FC<{
       setTimeout(() => {
         form.resetFields();
         setLoading(false);
-        setAddData((prev: boolean) => !prev);
       }, 2000);
     } catch (e) {
-      console.log(e);
+      notification.error({
+        message: `Error`,
+        description: "Error in adding data",
+        placement: "bottomRight",
+        style: { borderLeft: "10px solid red" },
+      });
     }
   };
 

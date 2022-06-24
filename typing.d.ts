@@ -1,4 +1,5 @@
 export interface CompanyDetails {
+  payload: never;
   companyManager: CompanyMaster;
   companyAddress: Address[];
 }
