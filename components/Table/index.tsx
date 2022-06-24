@@ -1,8 +1,17 @@
 import { Button, Divider, Input, Table, Typography } from "antd";
-import { PlusOutlined } from "@ant-design/icons";
+import { PlusOutlined, CloseCircleOutlined } from "@ant-design/icons";
 import qs from "qs";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import classes from "./Table.module.css";
+import { useSelector } from "react-redux";
+import Link from "next/link";
+import { CompanyDetails } from "../../typing";
+
+interface DataInterface {
+  companyName: string;
+  website: string;
+  phone: string;
+}
 
 const columns = [
   {
@@ -23,6 +32,7 @@ const columns = [
   },
   {
     title: "Action",
+    dataIndex: "action",
   },
 ];
 
@@ -34,24 +44,54 @@ const getRandomuserParams = (params: any) => ({
 
 const { Title, Paragraph } = Typography;
 
-const App = () => {
-  const [data, setData] = useState([
-    {
-      companyName: "Clinch Tech",
-      website: "www.google.com",
-      phone: "1234567890",
-    },
-    {
-      companyName: "Leap Frog",
-      website: "www.leapfrog.com",
-      phone: "1234567890",
-    },
-  ]);
+const CompanyTable = () => {
+  const [searchKeyword, setSearchKeyword] = useState("");
+  const [data, setData] = useState<[] | DataInterface[]>([]);
+
   const [loading, setLoading] = useState(false);
   const [pagination, setPagination] = useState({
     current: 1,
     pageSize: 10,
   });
+
+  const companyData = useSelector((state: any) => {
+    return state.company.companyDetails;
+  });
+
+  // filtering data got from redux store
+  const getData = useCallback((filteringData: CompanyDetails[]) => {
+    if (!filteringData) return;
+    const data = filteringData.map((company: any) => {
+      return {
+        companyName: company.companyManager.name,
+        website: company.companyManager.website,
+        phone: company.companyManager.phone,
+      };
+    });
+    setData(data);
+  }, []);
+
+  useEffect(() => {
+    getData(companyData);
+  }, [getData, companyData]);
+
+  const handleSearch = () => {
+    if (searchKeyword === "") {
+      getData(companyData);
+      return;
+    }
+
+    const newData = companyData.filter((item: any) => {
+      return item.companyManager.name
+        .toLowerCase()
+        .includes(searchKeyword.toLowerCase());
+    });
+    if (!newData) {
+      setData([]);
+      return;
+    }
+    getData(newData);
+  };
 
   return (
     <div className={classes["container"]}>
@@ -68,8 +108,20 @@ const App = () => {
       >
         <div>
           <Paragraph>Company Name</Paragraph>
-          <div style={{ display: "flex", columnGap: "20px" }}>
-            <Input style={{ width: "100%" }} />
+          <div
+            style={{
+              display: "flex",
+              columnGap: "20px",
+              alignItems: "center",
+              width: "150%",
+              borderRadius: "5px",
+            }}
+          >
+            <Input
+              style={{ width: "100%", padding: "10px" }}
+              value={searchKeyword}
+              onChange={(e) => setSearchKeyword(e.target.value)}
+            />
             <Button
               size="large"
               style={{
@@ -80,25 +132,34 @@ const App = () => {
                 padding: "10px 20px",
                 borderRadius: "5px",
               }}
+              onClick={handleSearch}
             >
               Search
             </Button>
-            <Button></Button>
+            <Button
+              onClick={() => setSearchKeyword("")}
+              type="text"
+              icon={<CloseCircleOutlined />}
+            >
+              Clear
+            </Button>
           </div>
         </div>
-        <Button
-          size="large"
-          style={{
-            backgroundColor: "black",
-            color: "white",
-            padding: "10px 20px",
-            height: "fit-content",
-            borderRadius: "5px",
-          }}
-          icon={<PlusOutlined />}
-        >
-          Add new Company
-        </Button>
+        <Link href={"/add"}>
+          <Button
+            size="large"
+            style={{
+              backgroundColor: "black",
+              color: "white",
+              padding: "10px 20px",
+              height: "fit-content",
+              borderRadius: "5px",
+            }}
+            icon={<PlusOutlined />}
+          >
+            Add new Company
+          </Button>
+        </Link>
       </div>
       <Table
         columns={columns}
@@ -112,4 +173,4 @@ const App = () => {
   );
 };
 
-export default App;
+export default CompanyTable;

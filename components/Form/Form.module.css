@@ -40,7 +40,14 @@
   }
 }
 
-.container > button:disabled {
-  background-color: gray;
+.container button:disabled {
+  background-color: rgb(206, 194, 194);
   cursor: not-allowed;
+}
+
+.button-container {
+  display: flex;
+  column-gap: 20px;
+  margin-top: 20px;
+  justify-content: flex-end;
 }

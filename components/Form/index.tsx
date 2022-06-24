@@ -6,6 +6,8 @@ import { ExclamationCircleOutlined } from "@ant-design/icons";
 import { Address, CompanyDetails } from "../../typing";
 import { useDispatch } from "react-redux";
 import { companyActions } from "../../store/company/company-slice";
+import { useRouter } from "next/router";
+import Link from "next/link";
 
 const { Title } = Typography;
 
@@ -31,6 +33,7 @@ interface FormInterface {
 
 const FormData = () => {
   const dispatch = useDispatch();
+  const router = useRouter();
 
   const [form] = Form.useForm();
   const [loading, setLoading] = React.useState(false);
@@ -73,6 +76,7 @@ const FormData = () => {
       setTimeout(() => {
         form.resetFields();
         setLoading(false);
+        router.push("/");
       }, 2000);
     } catch (e) {
       notification.error({
@@ -265,16 +269,24 @@ const FormData = () => {
           )}
         </Form.List>
 
-        <Form.Item>
-          <Button
-            type="primary"
-            htmlType="submit"
-            disabled={loading}
-            loading={loading}
-          >
-            Submit
-          </Button>
-        </Form.Item>
+        <div className={classes["button-container"]}>
+          <Form.Item>
+            <Button
+              type="primary"
+              style={{ backgroundColor: "black" }}
+              htmlType="submit"
+              disabled={loading}
+              loading={loading}
+            >
+              Submit
+            </Button>
+          </Form.Item>
+          <Form.Item>
+            <Link href={"/"}>
+              <Button type="ghost">Cancel</Button>
+            </Link>
+          </Form.Item>
+        </div>
       </Form>
     </div>
   );
