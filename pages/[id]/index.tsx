@@ -6,8 +6,9 @@ import { CompanyDetails } from "../../typing";
 import classes from "./styles.module.css";
 
 const DUMMY_DATA: CompanyDetails = {
+  id: "abc",
   companyManager: {
-    companyName: "Leapfrog",
+    name: "Leapfrog",
     email: "leapfrog@gmail.com",
     phone: "9856023456",
     website: "www.leapfrog.com",
@@ -37,11 +38,9 @@ const DUMMY_DATA: CompanyDetails = {
 const { Title, Paragraph } = Typography;
 
 const CompanyData = () => {
-  const [paramId, setParamId] = React.useState("");
   const router = useRouter();
-  const [singleCompanyData, setSingleCompanyData] = useState<
-    CompanyDetails | {}
-  >({});
+  const [singleCompanyData, setSingleCompanyData] =
+    useState<CompanyDetails>(DUMMY_DATA);
 
   const companyData = useSelector((state: any) => {
     return state.company.companyDetails;
@@ -50,14 +49,12 @@ const CompanyData = () => {
   useEffect(() => {
     if (!router.query.id) return;
     if (!companyData) return;
-    setParamId(router.query.id as any);
 
-    const filteredData = companyData.filter((company: CompanyDetails) => {
-      return company;
-      company.companyManager.companyName === router.query.id;
+    const filteredData = companyData.find((company: CompanyDetails) => {
+      return +company.id === +router.query.id!;
     });
 
-    console.log("filteredData", filteredData);
+    setSingleCompanyData(filteredData);
   }, [router.query.id, companyData]);
 
   return (
@@ -78,7 +75,7 @@ const CompanyData = () => {
                 Company Name:
               </Title>
               <Paragraph type="secondary">
-                {DUMMY_DATA.companyManager.companyName}
+                {singleCompanyData?.companyManager?.name}
               </Paragraph>
             </div>
             <div>
@@ -86,7 +83,7 @@ const CompanyData = () => {
                 Website:
               </Title>
               <Paragraph type="secondary">
-                {DUMMY_DATA.companyManager.website}
+                {singleCompanyData.companyManager.website}
               </Paragraph>
             </div>
             <div>
@@ -94,7 +91,7 @@ const CompanyData = () => {
                 Email:
               </Title>
               <Paragraph type="secondary">
-                {DUMMY_DATA.companyManager.email}
+                {singleCompanyData.companyManager.email}
               </Paragraph>
             </div>
             <div>
@@ -102,12 +99,12 @@ const CompanyData = () => {
                 Phone:
               </Title>
               <Paragraph type="secondary">
-                {DUMMY_DATA.companyManager.phone}
+                {singleCompanyData.companyManager.phone}
               </Paragraph>
             </div>
           </div>
           <div style={{ marginTop: "2rem" }}>
-            {DUMMY_DATA?.companyAddress?.map((address, i) => {
+            {singleCompanyData?.companyAddress?.map((address, i) => {
               return (
                 <div key={address.addressCode} style={{ margin: "1rem 0" }}>
                   <Title level={5}>Address {i + 1}</Title>

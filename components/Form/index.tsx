@@ -56,6 +56,7 @@ const FormData = () => {
       addressCode: values.addressCode,
     };
     const data = {
+      id: new Date().getTime(),
       companyManager: {
         name: values.companyName,
         website: values.website,

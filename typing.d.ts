@@ -1,10 +1,11 @@
 export interface CompanyDetails {
+  id: string;
   companyManager: CompanyMaster;
   companyAddress: Address[];
 }
 
 interface CompanyMaster {
-  companyName: string;
+  name: string;
   website: string;
   phone: string;
   email: string;

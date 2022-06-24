@@ -6,11 +6,13 @@ import classes from "./Table.module.css";
 import { useSelector } from "react-redux";
 import Link from "next/link";
 import { CompanyDetails } from "../../typing";
+import { useRouter } from "next/router";
 
 interface DataInterface {
   companyName: string;
   website: string;
   phone: string;
+  id: string;
 }
 
 const columns = [
@@ -45,6 +47,8 @@ const getRandomuserParams = (params: any) => ({
 const { Title, Paragraph } = Typography;
 
 const CompanyTable = () => {
+  const router = useRouter();
+
   const [searchKeyword, setSearchKeyword] = useState("");
   const [data, setData] = useState<[] | DataInterface[]>([]);
 
@@ -66,6 +70,7 @@ const CompanyTable = () => {
         companyName: company.companyManager.name,
         website: company.companyManager.website,
         phone: company.companyManager.phone,
+        id: company.id,
       };
     });
     setData(data);
@@ -162,6 +167,14 @@ const CompanyTable = () => {
         </Link>
       </div>
       <Table
+        style={{ cursor: "pointer" }}
+        onRow={(record, rowIndex) => {
+          return {
+            onClick: (event) => {
+              router.push(`/${record.id}`);
+            },
+          };
+        }}
         columns={columns}
         // rowKey={(record) => record?.login?.uuid}
         dataSource={data}
