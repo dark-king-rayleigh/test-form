@@ -1,5 +1,5 @@
 import React from "react";
-import { Typography, Form, Input, Button, message, Space, Select } from "antd";
+import { Typography, Form, Input, Button, Select, notification } from "antd";
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import classes from "./Form.module.css";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
@@ -64,6 +64,12 @@ const FormData: React.FC<{
 
     try {
       setCompanyData([...companyData, data]);
+      notification.info({
+        message: `Success`,
+        description: "Successfully added data",
+        placement: "bottomRight",
+        style: { borderLeft: "10px solid #4ee44e" },
+      });
       setTimeout(() => {
         form.resetFields();
         setLoading(false);
