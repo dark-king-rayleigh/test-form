@@ -1,18 +1,77 @@
-import { Typography, Form, Input, Button, message } from "antd";
+import React from "react";
+import { Typography, Form, Input, Button, message, Space, Select } from "antd";
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import classes from "./Form.module.css";
-
-import React, { useState } from "react";
-
-type LayoutType = Parameters<typeof Form>[0]["layout"];
+import { ExclamationCircleOutlined } from "@ant-design/icons";
+import { Address, CompanyDetails } from "../../typing";
 
 const { Title } = Typography;
 
-const Home = () => {
-  const [form] = Form.useForm();
+// Interface Starts
+interface FormInterface {
+  companyName: string;
+  address1: string;
+  address2: string;
+  city: string;
+  state: string;
+  country: string;
+  website: string;
+  email: string;
+  officeBranch: string;
+  address: [] | Address[];
+  phone: string;
+  addressCode: string;
+}
 
-  const onFinish = (values: any) => {
-    console.log("Values", values);
+// Interface Ends
+
+// Main Component starts
+
+const FormData: React.FC<{
+  setCompanyData: Function;
+  companyData: CompanyDetails[] | [];
+  setAddData: Function;
+}> = ({ setCompanyData, companyData, setAddData }) => {
+  const [form] = Form.useForm();
+  const [loading, setLoading] = React.useState(false);
+
+  //   Submitting the form
+  const handleSubmit = (values: FormInterface) => {
+    if (!values.address) {
+      values.address = [];
+    }
+
+    setLoading(true);
+
+    const mainAddress = {
+      address1: values.address1,
+      address2: values.address2,
+      city: values.city,
+      state: values.state,
+      country: values.country,
+      officeBranch: values.officeBranch,
+      addressCode: values.addressCode,
+    };
+    const data = {
+      companyManager: {
+        name: values.companyName,
+        website: values.website,
+        email: values.email,
+        phone: values.phone,
+      },
+      companyAddress: [mainAddress, ...values.address],
+    };
+
+    try {
+      setCompanyData([...companyData, data]);
+      setTimeout(() => {
+        form.resetFields();
+        setLoading(false);
+        setAddData((prev: boolean) => !prev);
+      }, 2000);
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   return (
@@ -20,11 +79,11 @@ const Home = () => {
       <Title level={4} style={{ margin: "20px 0", color: "gray" }}>
         Company Details
       </Title>
-      <Form form={form} layout="vertical" onFinish={onFinish}>
+      <Form form={form} layout="vertical" onFinish={handleSubmit}>
         <div className={classes["form-container"]}>
           <Form.Item
             label="Company Name"
-            name="company-name"
+            name="companyName"
             rules={[{ required: true }]}
           >
             <Input placeholder="Enter company name" />
@@ -76,31 +135,133 @@ const Home = () => {
           Address 1
         </Title>
         <div className={classes["form-container"]}>
-          <Form.Item label="Company Name">
-            <Input placeholder="Enter company name" />
+          <Form.Item
+            label="Office Branch"
+            name="officeBranch"
+            rules={[
+              {
+                required: true,
+              },
+            ]}
+          >
+            <Input placeholder="Eg: HQ, Branch" />
           </Form.Item>
-          <Form.Item label="Website">
+
+          <Form.Item label="Country" name="country">
+            <Select defaultValue="USA">
+              <Select.Option value="USA">USA</Select.Option>
+              <Select.Option value="Nepal">Nepal</Select.Option>
+            </Select>
+          </Form.Item>
+
+          <Form.Item
+            label="Address 1"
+            name="address1"
+            rules={[
+              {
+                required: true,
+                message: "This field is required",
+              },
+            ]}
+          >
+            <Input placeholder="Address 1" />
+          </Form.Item>
+          <Form.Item label="Address 2" name="address2">
             <Input placeholder="Enter Website" />
           </Form.Item>
-          <Form.Item label="Company Name">
-            <Input placeholder="Enter company name" />
+          <Form.Item label="Zip/Postal Code" name="addressCode">
+            <Input placeholder="Enter Zip/Postal Code" />
           </Form.Item>
-          <Form.Item label="Website">
-            <Input placeholder="Enter Website" />
+          <Form.Item label="City" name="city">
+            <Input placeholder="Enter City" />
           </Form.Item>
-          <Form.Item label="Website">
-            <Input placeholder="Enter Website" />
-          </Form.Item>
-          <Form.Item label="Company Name">
-            <Input placeholder="Enter company name" />
-          </Form.Item>
-          <Form.Item label="Field A">
-            <Input placeholder="input placeholder" />
+          <Form.Item label="State" name="state">
+            <Input placeholder="Enter State" />
           </Form.Item>
         </div>
 
+        <Form.List name="address">
+          {(fields, { add, remove }) => (
+            <>
+              {fields.map(({ key, name, ...restField }) => (
+                <div key={key}>
+                  <Title level={5} style={{ margin: "15px 0" }}>
+                    Address {key + 2}
+                  </Title>
+
+                  <MinusCircleOutlined onClick={() => remove(name)} />
+
+                  <div className={classes["form-container"]}>
+                    <Form.Item
+                      label="Office Branch"
+                      name={[name, "officeBranch"]}
+                      rules={[
+                        {
+                          required: true,
+                        },
+                      ]}
+                    >
+                      <Input placeholder="Eg: HQ, Branch" />
+                    </Form.Item>
+
+                    <Form.Item label="Country" name={[name, "country"]}>
+                      <Select defaultValue="USA">
+                        <Select.Option value="USA">USA</Select.Option>
+                        <Select.Option value="Nepal">Nepal</Select.Option>
+                      </Select>
+                    </Form.Item>
+
+                    <Form.Item
+                      {...restField}
+                      label="Address 1"
+                      name={[name, "address1"]}
+                      rules={[
+                        {
+                          required: true,
+                        },
+                      ]}
+                    >
+                      <Input placeholder="Address 1" />
+                    </Form.Item>
+                    <Form.Item label="Address 2" name={[name, "address2"]}>
+                      <Input placeholder="Enter Website" />
+                    </Form.Item>
+                    <Form.Item
+                      label="Zip/Postal Code"
+                      name={[name, "addressCode"]}
+                    >
+                      <Input placeholder="Enter Zip/Postal Code" />
+                    </Form.Item>
+                    <Form.Item label="City" name={[name, "city"]}>
+                      <Input placeholder="Enter City" />
+                    </Form.Item>
+                    <Form.Item label="State" name={[name, "state"]}>
+                      <Input placeholder="Enter State" />
+                    </Form.Item>
+                  </div>
+                </div>
+              ))}
+              <Form.Item>
+                <Button
+                  type="dashed"
+                  onClick={() => add()}
+                  block
+                  icon={<PlusOutlined />}
+                >
+                  Add field
+                </Button>
+              </Form.Item>
+            </>
+          )}
+        </Form.List>
+
         <Form.Item>
-          <Button type="primary" htmlType="submit">
+          <Button
+            type="primary"
+            htmlType="submit"
+            disabled={loading}
+            loading={loading}
+          >
             Submit
           </Button>
         </Form.Item>
@@ -109,4 +270,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default FormData;

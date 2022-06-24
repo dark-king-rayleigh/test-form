@@ -1,9 +1,15 @@
-import { Typography } from "antd";
 import type { NextPage } from "next";
 import Head from "next/head";
+import { useState } from "react";
 import Form from "../components/Form";
+import TableView from "../components/Table";
+import { CompanyDetails } from "../typing";
 
 const Home: NextPage = () => {
+  const [companyData, setCompanyData] = useState<CompanyDetails[] | []>([]);
+  const [addData, setAddData] = useState(true);
+  console.log("companyData", companyData);
+
   return (
     <>
       <Head>
@@ -19,7 +25,15 @@ const Home: NextPage = () => {
           paddingTop: "4rem",
         }}
       >
-        <Form />
+        {!addData ? (
+          <TableView />
+        ) : (
+          <Form
+            setCompanyData={setCompanyData}
+            companyData={companyData}
+            setAddData={setAddData}
+          />
+        )}
       </main>
     </>
   );
