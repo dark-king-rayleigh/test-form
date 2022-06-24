@@ -1,0 +1,26 @@
+.container {
+  max-width: 1400px;
+  width: 90%;
+  margin: 0 auto;
+  background: white;
+  padding: 3rem;
+}
+
+.displayContainer {
+  display: grid;
+  grid-template-columns: 1fr;
+  padding-top: 20px;
+  row-gap: 20px;
+}
+
+@media (min-width: 768px) {
+  .displayContainer {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media screen and (min-width: 1400px) {
+  .displayContainer {
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+  }
+}
