@@ -143,6 +143,7 @@ const CompanyTable = () => {
             size="large"
             className={classes["btn-add"]}
             icon={<PlusOutlined />}
+            style={{ backgroundColor: "black", color: "white" }}
           >
             Add new Company
           </Button>
