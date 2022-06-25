@@ -1,5 +1,14 @@
 import React from "react";
-import { Typography, Form, Input, Button, Select, notification } from "antd";
+import {
+  Typography,
+  Form,
+  Input,
+  Button,
+  Select,
+  notification,
+  Modal,
+  message,
+} from "antd";
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import classes from "./Form.module.css";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
@@ -87,6 +96,27 @@ const FormData = () => {
         style: { borderLeft: "10px solid red" },
       });
     }
+  };
+
+  const { confirm } = Modal;
+
+  const showPromiseConfirm = (deleteFunction: Function) => {
+    console.log("deleteFunction", deleteFunction);
+
+    // @ts-ignore
+    confirm({
+      title: "Do you want to delete these items?",
+      icon: <ExclamationCircleOutlined />,
+
+      onOk() {
+        return new Promise((resolve, reject) => {
+          deleteFunction();
+          setTimeout(Math.random() > 0.5 ? resolve : reject, 1000);
+          message.success("Deleted successfully");
+        }).catch(() => console.log("Oops errors!"));
+      },
+      onCancel() {},
+    });
   };
 
   return (
@@ -204,7 +234,9 @@ const FormData = () => {
                     Address {key + 2}
                   </Title>
 
-                  <MinusCircleOutlined onClick={() => remove(name)} />
+                  <MinusCircleOutlined
+                    onClick={() => showPromiseConfirm(() => remove(name))}
+                  />
 
                   <div className={classes["form-container"]}>
                     <Form.Item
