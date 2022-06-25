@@ -29,12 +29,6 @@ interface DataInterface {
   id: string;
 }
 
-const getRandomuserParams = (params: any) => ({
-  results: params.pagination?.pageSize,
-  page: params.pagination?.current,
-  ...params,
-});
-
 const { Title, Paragraph } = Typography;
 
 const CompanyTable = () => {
@@ -206,11 +200,10 @@ const CompanyTable = () => {
       <Table
         style={{ cursor: "pointer" }}
         columns={columns}
-        // rowKey={(record) => record?.login?.uuid}
+        rowKey={(record) => record?.id}
         dataSource={data}
         pagination={pagination}
         loading={loading}
-        // onChange={handleTableChange}
       />
     </div>
   );

@@ -106,7 +106,7 @@ const CompanyData = () => {
           <div style={{ marginTop: "2rem" }}>
             {singleCompanyData?.companyAddress?.map((address, i) => {
               return (
-                <div key={address.addressCode} style={{ margin: "1rem 0" }}>
+                <div key={i} style={{ margin: "1rem 0" }}>
                   <Title level={5}>Address {i + 1}</Title>
                   <div className={classes.displayContainer}>
                     <div>

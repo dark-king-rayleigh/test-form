@@ -12,7 +12,7 @@ import {
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import classes from "./Form.module.css";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
-import { Address, CompanyDetails } from "../../typing";
+import { Address } from "../../typing";
 import { useDispatch } from "react-redux";
 import { companyActions } from "../../store/company/company-slice";
 import { useRouter } from "next/router";
@@ -212,7 +212,7 @@ const FormData = () => {
             <Input placeholder="Address 1" />
           </Form.Item>
           <Form.Item label="Address 2" name="address2">
-            <Input placeholder="Enter Website" />
+            <Input placeholder="Address 2" />
           </Form.Item>
           <Form.Item label="Zip/Postal Code" name="addressCode">
             <Input placeholder="Enter Zip/Postal Code" />
@@ -271,7 +271,7 @@ const FormData = () => {
                       <Input placeholder="Address 1" />
                     </Form.Item>
                     <Form.Item label="Address 2" name={[name, "address2"]}>
-                      <Input placeholder="Enter Website" />
+                      <Input placeholder="Address 2" />
                     </Form.Item>
                     <Form.Item
                       label="Zip/Postal Code"
