@@ -1,12 +1,26 @@
-import { Button, Divider, Input, Table, Typography } from "antd";
-import { PlusOutlined, CloseCircleOutlined } from "@ant-design/icons";
-import qs from "qs";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import {
+  Button,
+  Divider,
+  Dropdown,
+  Input,
+  Menu,
+  Table,
+  Typography,
+} from "antd";
+import {
+  PlusOutlined,
+  CloseCircleOutlined,
+  EllipsisOutlined,
+  EyeFilled,
+  DeleteOutlined,
+} from "@ant-design/icons";
+import { useCallback, useEffect, useState } from "react";
 import classes from "./Table.module.css";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Link from "next/link";
 import { CompanyDetails } from "../../typing";
 import { useRouter } from "next/router";
+import { companyActions } from "../../store/company/company-slice";
 
 interface DataInterface {
   companyName: string;
@@ -14,29 +28,6 @@ interface DataInterface {
   phone: string;
   id: string;
 }
-
-const columns = [
-  {
-    title: "Company Name",
-    dataIndex: "companyName",
-    sorter: true,
-  },
-  {
-    title: "Website",
-    dataIndex: "website",
-    width: "20%",
-    sorter: true,
-  },
-  {
-    title: "Phone",
-    dataIndex: "phone",
-    sorter: true,
-  },
-  {
-    title: "Action",
-    dataIndex: "action",
-  },
-];
 
 const getRandomuserParams = (params: any) => ({
   results: params.pagination?.pageSize,
@@ -47,6 +38,69 @@ const getRandomuserParams = (params: any) => ({
 const { Title, Paragraph } = Typography;
 
 const CompanyTable = () => {
+  const dispatch = useDispatch();
+
+  const [editingId, setEditingId] = useState<string | null>(null);
+
+  const menu = (
+    <Menu
+      items={[
+        {
+          key: 1,
+          label: (
+            <Link href={`/${editingId}`}>
+              <span>
+                <EyeFilled />
+                <span> View</span>
+              </span>
+            </Link>
+          ),
+        },
+
+        {
+          key: "2",
+          label: (
+            <span
+              onClick={() => dispatch(companyActions.removeCompany(editingId))}
+            >
+              <DeleteOutlined />
+              <span> Delete</span>
+            </span>
+          ),
+        },
+      ]}
+    />
+  );
+  const columns = [
+    {
+      title: "Company Name",
+      dataIndex: "companyName",
+      sorter: true,
+    },
+    {
+      title: "Website",
+      dataIndex: "website",
+      width: "20%",
+      sorter: true,
+    },
+    {
+      title: "Phone",
+      dataIndex: "phone",
+      sorter: true,
+    },
+    {
+      title: "Action",
+      render: (record: any) => {
+        return (
+          <>
+            <Dropdown overlay={menu} trigger={["click"]}>
+              <EllipsisOutlined onClick={() => setEditingId(record.id)} />
+            </Dropdown>
+          </>
+        );
+      },
+    },
+  ];
   const router = useRouter();
 
   const [searchKeyword, setSearchKeyword] = useState("");
@@ -151,13 +205,6 @@ const CompanyTable = () => {
       </div>
       <Table
         style={{ cursor: "pointer" }}
-        onRow={(record, rowIndex) => {
-          return {
-            onClick: (event) => {
-              router.push(`/${record.id}`);
-            },
-          };
-        }}
         columns={columns}
         // rowKey={(record) => record?.login?.uuid}
         dataSource={data}

@@ -4,12 +4,16 @@ import { CompanyDetails } from "../../typing";
 const companySlice = createSlice({
   name: "company",
   initialState: {
-    companyDetails: [],
+    companyDetails: [] as any,
   },
   reducers: {
-    // @ts-ignore
-    addCompanyDetails: (state, action: CompanyDetails) => {
+    addCompanyDetails: (state, action: any) => {
       state.companyDetails = [...state.companyDetails, action.payload];
+    },
+    removeCompany: (state, action: any) => {
+      state.companyDetails = state.companyDetails.filter(
+        (company: any) => company.id !== action.payload
+      );
     },
   },
 });
